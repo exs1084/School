@@ -1,2 +1,2 @@
-a file titles "lunaVirus.wav" was too large for github to upload. can replace with any .wav
-sound file with the same name.
+a file titled "Hatsune_Miku_-_Rolling_Girl_PV_-_VOCALOID.wav" was too large to upload to github and must be replaced
+with aanother .wav file of the same name.
