@@ -1,0 +1,35 @@
+commit 9a1e1a783919531278273df59b1635a75eafd958
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Mar 24 15:53:18 2016 -0400
+
+    comments written
+
+commit 6a004f256b260372fdce1362ea6769409ff61a4f
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Mar 24 15:48:33 2016 -0400
+
+    corrected memory leaks
+
+commit 593f9dd855139f2bc7773d829f7864d8a3fbf1c4
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Mar 24 15:40:06 2016 -0400
+
+    code works booiiiii
+
+commit abfc0cae83eb22c3e2b5a6592d751066e372633b
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Mar 24 14:49:54 2016 -0400
+
+    reads in values correctly
+
+commit a9e0c7d4c2ed0aaf64a2537d0c7c9863485b60c3
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Mar 24 14:25:45 2016 -0400
+
+    clear and build probably complete.
+
+commit 70f6b0b3b2e9adebfdb407a64a28873d8e858bd6
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Mar 24 14:17:28 2016 -0400
+
+    it has begun

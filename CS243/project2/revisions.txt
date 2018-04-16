@@ -1,0 +1,47 @@
+commit 8ec93f34b088ddabd45fb41a77862199b8aaea8a
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Tue Apr 5 17:19:07 2016 -0400
+
+    minor issue solved
+
+commit d09e6c7e2f35ff073156f933ac3e8bc79d69c047
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Tue Apr 5 17:12:25 2016 -0400
+
+    all done
+
+commit fe972ed56ac41fb9077b3d597b4665b9967086d7
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sun Apr 3 23:20:26 2016 -0400
+
+    issue is now in pop
+
+commit f457341e31dcf79326813717774a6c1bfb993664
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sun Apr 3 16:42:39 2016 -0400
+
+    stack is busted? idk anymore.
+
+commit 6fa271a71692739c0552f01beed4d568d3794282
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Mar 31 18:50:08 2016 -0400
+
+    expnode written and appears to work correctly
+
+commit 10bde17808179a532793ad5d16f0d4b157d66d44
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Mar 31 17:16:51 2016 -0400
+
+    interp runs everything so far correctly
+
+commit fbf7b1e9e696e3580ddbe69ef1a64c52d061d214
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Wed Mar 30 21:17:54 2016 -0400
+
+    symbol table class written
+
+commit 44062c8aea284031be0b08b8fdd824c40ac78172
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Tue Mar 29 21:37:42 2016 -0400
+
+    stack written

@@ -1,0 +1,6 @@
+commit 65553fd49632b4556b7d1dd6d989678e7ac4a5d5
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sun Feb 7 20:05:36 2016 -0500
+
+    wrote inital versions
+    o Please enter the commit message for your changes. Lines starting

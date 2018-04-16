@@ -1,0 +1,71 @@
+commit 93596e922e3dbef39fed23f8cf6f6710674b6cf6
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Mon Feb 29 18:07:37 2016 -0500
+
+    cahnging logic
+
+commit aa3e68464835ff5c23daae2af63a09dc1752dce9
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Mon Feb 29 18:04:48 2016 -0500
+
+    misc
+
+commit 54212a3b053c910d074ad93af366616a819c99a0
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Mon Feb 29 18:01:50 2016 -0500
+
+    corrected error messages
+
+commit 23dd11b1e089edc0f5ae46622546d019418415a2
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Mon Feb 29 17:54:19 2016 -0500
+
+    fixed usleep and randomizations
+
+commit 67f6caffd0deaac7cab7709ada8746def0e1bf6f
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sun Feb 28 23:14:39 2016 -0500
+
+    added usleep delays to improve randomness
+
+commit 7d9094288f20be001529ef6d62fce95170fec24e
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sun Feb 28 15:50:57 2016 -0500
+
+    utilized cumChange
+
+commit 4f72dde9d4d86b83781fc3b6a6a6e3a9494a7424
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sun Feb 28 15:45:52 2016 -0500
+
+    update written
+
+commit 6825df4c77346d50c0b0afdd272a11f17b9bc8d9
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sat Feb 27 17:22:29 2016 -0500
+
+    added comments, basic update code added
+
+commit d25ed728f1486ba56d16d87fbefadf1650d6a9e6
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sat Feb 27 16:40:40 2016 -0500
+
+    added printBoard and status bar prints.
+
+commit 48f07c5c701a8bb9283eb5bc3bb6f785de865553
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Feb 25 19:13:10 2016 -0500
+
+    properly places trees and prints a basic board
+
+commit 57a2c531177a16ad217e42003abdd87fa235dafc
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Feb 25 19:03:34 2016 -0500
+
+    added fillBoard, lame, and lameprint
+
+commit b7d558de2f28b170487b1336c5535640ca6b6afd
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Feb 25 17:59:03 2016 -0500
+
+    properly reads inputs and ends if bad input.

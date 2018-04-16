@@ -1,0 +1,56 @@
+Assignment Report
+Assignment name is: Wildfire
+My name is: 			Erikson Sodergren
+My login ID is:			exs1084
+
+[insert your answers after the question and add more lines as needed.]
+
+	[MAKE YOUR ANSWERS SHORT AND TO THE POINT. BULLET POINTS ARE GOOD.]
+
+	[USE PLAIN TEXT]
+
+============= PROGRAM STATUS ==============
+
+What is the status of the program?
+
+[e.g. does it run correctly or crash, infinite loop when it should not, other?]
+
+Runs correctly
+
+
+============= PROGRAM USAGE AND OPTIONS ==
+
+If you implemented anything special, describe your experiment results here.
+
+[see the assignment writeup for details if this applies to your work.]
+
+nothing particularly special
+
+
+============= GENERAL PROJECT FEEDBACK ==============
+
+What did I learn?
+how to get usleep to actually work correctly.
+how to use randomization in C.
+
+
+
+What was easy about this assignment?
+the majority of it.
+
+
+
+What gave you problems or troubles?
+getting usleep to not be "implicit declearation" and getting randomization to
+differ between runs.
+
+
+
+What would you like the instructor to do to improve this assignment?
+nothing really.
+
+
+
+What would you have liked to do in this assignment?
+pick my own characters for empty, tree, burning, and burnt. i wanted T for tree.
+

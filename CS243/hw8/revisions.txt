@@ -1,0 +1,29 @@
+commit 4247cca58456815d1678aef54ba2084346a9bc56
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Fri Apr 29 18:53:45 2016 -0400
+
+    fixed improper read
+
+commit c77a8d351cf9288162c81facc0d1799eaf7d606c
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Fri Apr 29 18:51:09 2016 -0400
+
+    done i believe
+
+commit 042f280ae90efc33a5d3ad4e326900ade8e1d9c7
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Fri Apr 29 18:13:27 2016 -0400
+
+    functional!
+
+commit d171011ca5e2fb1c5d1468bf232630e3d5500ade
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Fri Apr 29 17:49:45 2016 -0400
+
+    pt-cruisers done?
+
+commit dfb0e55d43c7146a3ce4bf2ebe4d0eb6fa8cdd7b
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Fri Apr 29 13:35:08 2016 -0400
+
+    some stuff written

@@ -1,0 +1,23 @@
+commit 64c9f4e6310a442474205960ee18616c061cb689
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sat Apr 16 15:48:32 2016 -0400
+
+    fixed issue with map_delete
+
+commit 0884e8cd62cae61df7045840ee2efe00779249da
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sat Apr 16 14:50:48 2016 -0400
+
+    fixed almost 4k bytes of memeory leak
+
+commit 20c87d7be9c7fd63437bc5f1c9d6849c53126db4
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sat Apr 16 14:42:24 2016 -0400
+
+    looks complete
+
+commit 9b0b805ff5c44533fc8efa9394bae85e0c7c0c96
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Sat Apr 16 14:35:33 2016 -0400
+
+    fully written now testing

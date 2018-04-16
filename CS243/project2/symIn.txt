@@ -1,0 +1,4 @@
+int a 5
+int queue 6
+double dub 5.5
+double leedle 6.66

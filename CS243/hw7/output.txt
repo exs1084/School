@@ -1,0 +1,14 @@
+==== File packets.3 contains 191 Packets.
+==>Packet 1
+version:		5 (5)
+IHL (Header Length):		4 (4)
+Type of Service (TOS)		0 (0)
+Total Length:		5cbd0034 (1555890228)
+Identification:		5cbd (23741)
+IP Flags:		0 (0)
+Fragment Offset:		0 (0)
+Time To Live (TTL):		80 (128)
+Protocol:		TCP IGRP UDP GRE ESP AH SKIP EIGRP OSPF L2TP 6 (6)
+Header Checksum:		cf004246 (-822066618)
+Source Address:		0.-49.-66.106
+Destination Address:		-127.21.37.13

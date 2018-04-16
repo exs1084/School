@@ -1,0 +1,29 @@
+commit 8500ae8452138d86582ae5de1760a4e1c2b952f9
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Apr 21 19:30:31 2016 -0400
+
+    kinda sorta killed it...probably a zombie now
+
+commit 5b407bd2b166ac5a5404c170221e809783534c72
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Apr 21 19:12:05 2016 -0400
+
+    only ipflags is a cockroach now. found good bug killer
+
+commit 67960c07528bea6dce960e7d7cfec839930db72a
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Apr 21 18:54:49 2016 -0400
+
+    progress be made, but bugs be cockroaches.
+
+commit 87e9a1c9875dd222c6eaf39e439d2f7a6251d238
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Apr 21 17:41:38 2016 -0400
+
+    done maybe?
+
+commit 6431b5bd43296c3776cb9b101da7d6a6aa7a5d16
+Author: Erikson  Sodergren <exs1084@cs.rit.edu>
+Date:   Thu Apr 21 17:05:43 2016 -0400
+
+    most written, currnetly making printIP
