@@ -1,0 +1,133 @@
+   1 0000               # File:		build.asm
+   2 0000               # Author:	K. Reek
+   3 0000               # Contributors:	P. White,
+   4 0000               #		W. Carithers,
+   5 0000               #		<<<Erikson Sodergren>>>
+   6 0000               #
+   7 0000               # Description:	Binary tree building functions.
+   8 0000               #
+   9 0000               # Revisions:	$Log$
+  10 0000               
+  11 0000               
+  12 0000               	.text			# this is program code
+  13 0000               	.align 2		# instructions must be on word boundaries
+  14 0000               
+  15 0000               # 
+  16 0000               # Name:		add_elements
+  17 0000               #
+  18 0000               # Description:	loops through array of numbers, adding each (in order)
+  19 0000               #		to the tree
+  20 0000               #
+  21 0000               # Arguments:	a0 the address of the array
+  22 0000               #   		a1 the number of elements in the array
+  23 0000               #		a2 the address of the root pointer
+  24 0000               # Returns:	none
+  25 0000               #
+  26 0000               
+  27 0000               	.globl	add_elements
+  28 0000               	
+  29 0000               add_elements:
+  30 0000 23BDFFF0		addi 	$sp, $sp, -16
+  31 0004 AFBF000C		sw 	$ra, 12($sp)
+  32 0008 AFB20008		sw 	$s2, 8($sp)
+  33 000c AFB10004		sw 	$s1, 4($sp)
+  34 0010 AFB00000		sw 	$s0, 0($sp)
+  35 0014               
+  36 0014               #***** BEGIN STUDENT CODE BLOCK 1 ***************************
+  37 0014               #
+  38 0014               # Insert your code to iterate through the array, calling build_tree
+  39 0014               # for each value in the array.  Remember that build_tree requires
+  40 0014               # two parameters:  the address of the variable which contains the
+  41 0014               # root pointer for the tree, and the number to be inserted.
+  42 0014               #
+  43 0014               # Feel free to save extra "S" registers onto the stack if you need
+  44 0014               # more for your function.
+  45 0014               #
+  46 0014 00808021		move	$s0, $a0
+  47 0018 00A08821		move	$s1, $a1	#count
+  48 001c 00C09021		move	$s2, $a2
+  49 0020               loop_add:
+  50 0020 10110006		beq	$zero, $s1, add_done
+  51 0024 02402021		move	$a0, $s2	#root for buildtree
+  52 0028 8E050000		lw	$a1, 0($s0)	#retrieve value
+  53 002c 2231FFFF		addi	$s1, $s1, -1
+  54 0030 22100004		addi	$s0, $s0, 4
+  55 0034 0C000015		jal	build_tree
+  56 0038 08000008		j	loop_add
+  57 003c               #
+  58 003c               # If you saved extra "S" reg to stack, make sure you restore them
+  59 003c               #
+  60 003c               
+  61 003c               #***** END STUDENT CODE BLOCK 1 *****************************
+  62 003c               
+  63 003c               add_done:
+  64 003c               
+  65 003c 8FBF000C		lw 	$ra, 12($sp)
+  66 0040 8FB20008		lw 	$s2, 8($sp)
+  67 0044 8FB10004		lw 	$s1, 4($sp)
+  68 0048 8FB00000		lw 	$s0, 0($sp)
+  69 004c 23BD0010		addi 	$sp, $sp, 16
+  70 0050 03E00008		jr 	$ra
+  71 0054               
+  72 0054               #***** BEGIN STUDENT CODE BLOCK 2 ***************************
+  73 0054               #
+  74 0054               # Put your build_tree subroutine here.
+  75 0054               #
+  76 0054               
+  77 0054               	.globl	build_tree
+  78 0054               build_tree:
+  79 0054               	.globl	allocate_mem
+  80 0054 23BDFFEC		addi 	$sp, $sp, -20
+  81 0058 AFBF0010		sw 	$ra, 16($sp)
+  82 005c AFB3000C		sw	$s3, 12($sp)
+  83 0060 AFB20008		sw 	$s2, 8($sp)
+  84 0064 AFB10004		sw 	$s1, 4($sp)
+  85 0068 AFB00000		sw 	$s0, 0($sp)
+  86 006c               
+  87 006c 00808021		move	$s0, $a0
+  88 0070 00A08821		move	$s1, $a1
+  89 0074 02405021		move	$t2, $s2
+  90 0078 8E120000		lw	$s2, 0($s0)
+  91 007c               build_loop:
+  92 007c 1240000A		beq	$s2, $zero, insert	#if empty, just insert
+  93 0080 8E480000		lw	$t0, 0($s2)
+  94 0084 1111000E		beq	$t0, $s1, build_done	#dont if value already in
+  95 0088 0228482A		slt	$t1, $s1, $t0
+  96 008c 11200003		beq	$t1, $zero, move_right
+  97 0090               move_left:
+  98 0090 224A0004		addi	$t2, $s2, 4	
+  99 0094 8E520004		lw	$s2, 4($s2)
+ 100 0098 0800001F		j	build_loop
+ 101 009c               move_right:
+ 102 009c 224A0008		addi	$t2, $s2, 8
+ 103 00a0 8E520008		lw	$s2, 8($s2)
+ 104 00a4 0800001F		j	build_loop
+ 105 00a8               insert:
+ 106 00a8 01409021		move	$s2, $t2
+ 107 00ac 34040003		li	$a0, 3		#allocate mem and udate
+ 108 00b0 0C000000		jal	allocate_mem
+ 109 00b4 00409821		move	$s3, $v0
+ 110 00b8 AE710000		sw	$s1, 0($s3)
+ 111 00bc AE530000		sw	$s3, 0($s2)	#be sure to set s2 to the pointer to update
+ 112 00c0               
+ 113 00c0               build_done:
+ 114 00c0 8FBF0010		lw 	$ra, 16($sp)
+ 115 00c4 8FB3000C		lw	$s3, 12($sp)
+ 116 00c8 8FB20008		lw 	$s2, 8($sp)
+ 117 00cc 8FB10004		lw 	$s1, 4($sp)
+ 118 00d0 8FB00000		lw 	$s0, 0($sp)
+ 119 00d4 23BD0014		addi 	$sp, $sp, 20
+ 120 00d8 03E00008		jr 	$ra
+ 121 00dc               #***** END STUDENT CODE BLOCK 2 *****************************
+
+
+add_done        0000003C R  text 
+add_elements    00000000 RG text 
+allocate_mem    ******** XG
+build_done      000000C0 R  text 
+build_loop      0000007C R  text 
+build_tree      00000054 RG text 
+insert          000000A8 R  text 
+loop_add        00000020 R  text 
+move_left       00000090 R  text 
+move_right      0000009C R  text 

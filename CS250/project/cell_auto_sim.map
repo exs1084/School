@@ -1,0 +1,102 @@
+Load map
+========
+
+Module:  cell_auto_sim.obj
+ Text segment:  1392 bytes, load point 0x00400000
+ Data segment:  576 bytes, load point 0x10000000
+ Symbols:
+             Name Section Mode    Value
+           error1   Text   R   0x00400530
+           error2   Text   R   0x00400540
+         pickrule   Text   R   0x0040031c
+           error3   Text   R   0x00400550
+        print_str   Text   R   0x00400064
+           error4   Text   R   0x00400560
+         rule_out   Data   R   0x100001eb
+        print_row   Text   R   0x0040013c
+         change_A   Text   R   0x004002b0
+         change_B   Text   R   0x00400294
+        init_dead   Text   R   0x004004a8
+          print_A   Text   R   0x00400160
+          print_B   Text   R   0x0040017c
+  apply_increment   Text   R   0x00400378
+       rule_error   Data   R   0x100000a8
+      live_or_not   Text   R   0x00400248
+        print_int   Text   R   0x00400000
+            row_A   Data   R   0x10000000
+            row_B   Data   R   0x10000047
+     single_space   Text   R   0x0040002c
+             r1xx   Text   R   0x00400324
+       begin_main   Text   R   0x004004bc
+         READ_INT          A   0x00000005
+             r000   Text   R   0x00400374
+       apply_last   Text   R   0x0040030c
+             gens   Data   R   0x10000094
+            scale   Data   R   0x100001f1
+             rule   Data   R   0x10000090
+        init_life   Text   R   0x0040049c
+         new_line   Data   R   0x100000a0
+            birth   Text   R   0x00400260
+          c_paren   Data   R   0x100000a6
+             dead   Text   R   0x00400268
+        print_bin   Text   R   0x00400070
+        print_gen   Text   R   0x00400010
+             r010   Text   R   0x00400360
+        done_rule   Text   R   0x0040026c
+        prow_done   Text   R   0x0040018c
+        gen_error   Data   R   0x100000d8
+        prow_cont   Text   R   0x00400188
+      apply_first   Text   R   0x004002f0
+      print_start   Text   R   0x004000c0
+       apply_done   Text   R   0x00400390
+        loop_gens   Text   R   0x004004cc
+            now_A   Text   R   0x004004d8
+         bin_loop   Text   R   0x0040008c
+             size   Data   R   0x1000009c
+      apply_rules   Text   R   0x00400270
+             r00x   Text   R   0x00400368
+       size_error   Data   R   0x1000010e
+             r100   Text   R   0x00400348
+          end_bin   Text   R   0x004000a8
+       update_gen   Text   R   0x004004dc
+     PRINT_STRING          A   0x00000004
+        main_read   Text   R   0x004003c4
+             main   Text   RG  0x004003b4
+           banner   Data   R   0x1000016b
+       last_scale   Text   R   0x00400514
+            space   Data   R   0x100000a2
+             r01x   Text   R   0x00400354
+             live   Text   R   0x00400250
+             r110   Text   R   0x00400334
+       input_loop   Text   R   0x00400480
+           rule_0   Text   R   0x004001b0
+           rule_1   Text   R   0x004001c0
+           rule_2   Text   R   0x004001d4
+           rule_3   Text   R   0x004001e8
+           rule_4   Text   R   0x004001fc
+           rule_5   Text   R   0x00400210
+           rule_6   Text   R   0x00400224
+           rule_7   Text   R   0x00400238
+        main_done   Text   R   0x0040051c
+       change_set   Text   R   0x004002c8
+      input_error   Data   R   0x1000013b
+          in_done   Text   R   0x004004b0
+         no_space   Text   R   0x00400038
+          o_paren   Data   R   0x100000a4
+             r10x   Text   R   0x0040033c
+             EXIT          A   0x0000000a
+      print_scale   Text   R   0x00400170
+         curr_gen   Data   R   0x10000098
+       print_char   Text   R   0x00400058
+             r0xx   Text   R   0x00400350
+        PRINT_INT          A   0x00000001
+       PRINT_CHAR          A   0x0000000b
+             r11x   Text   R   0x00400328
+       apply_loop   Text   R   0x004002d8
+
+Module:  r2k_startup.obj
+ Text segment:  36 bytes, load point 0x00400570
+ Symbols:
+             Name Section Mode    Value
+        SYS_EXIT2          A   0x00000011
+   __r2k__entry__   Text   RG  0x00400574

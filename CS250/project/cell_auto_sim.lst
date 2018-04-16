@@ -1,0 +1,714 @@
+   1 0000               # File:		$Id$
+   2 0000               # Author:	Erikson Sodergren
+   3 0000               
+   4 0000               # CONSTANTS
+   5 0000               #
+   6 0000               # syscall codes
+   7 0000               PRINT_INT = 	1
+   8 0000               PRINT_STRING = 	4
+   9 0000               PRINT_CHAR = 	11
+  10 0000               READ_INT = 	5
+  11 0000               EXIT = 		10
+  12 0000               
+  13 0000               	.data
+  14 0000               	.align 2
+  15 0000               row_A:
+  16 0000 2E2E2E2E		.asciiz "......................................................................"
+          2E2E2E2E
+          2E2E2E2E
+          2E2E2E2E
+          2E2E2E2E
+          2E2E2E2E
+  17 0047               
+  18 0047               row_B:
+  19 0047 2E2E2E2E		.asciiz "......................................................................"
+          2E2E2E2E
+          2E2E2E2E
+          2E2E2E2E
+          2E2E2E2E
+          2E2E2E2E
+  20 008e               
+  21 008e               rule:
+  22 008e 0000    		.word 30
+     0090 0000001E
+  23 0094               
+  24 0094               gens:
+  25 0094 00000000		.word 0
+  26 0098               curr_gen:
+  27 0098 00000000		.word 0
+  28 009c               size:
+  29 009c 00000007		.word 7
+  30 00a0               
+  31 00a0               new_line:
+  32 00a0 0A00    		.asciiz	"\n"
+  33 00a2               
+  34 00a2               space:
+  35 00a2 2000    		.asciiz " "
+  36 00a4               o_paren:
+  37 00a4 2800    		.asciiz "("
+  38 00a6               c_paren:
+  39 00a6 2900    		.asciiz ")"
+  40 00a8               
+  41 00a8               rule_error:
+  42 00a8 496E7661		.asciiz "Invalid rule number, cell-auto-sim terminating\n"
+          6C696420
+          72756C65
+          206E756D
+          6265722C
+          2063656C
+  43 00d8               
+  44 00d8               gen_error:
+  45 00d8 496E7661		.asciiz "Invalid generation number, cell-auto-sim terminating\n"
+          6C696420
+          67656E65
+          72617469
+          6F6E206E
+          756D6265
+  46 010e               
+  47 010e               size_error:
+  48 010e 496E7661		.asciiz "Invalid row size, cell-auto-sim terminating\n"
+          6C696420
+          726F7720
+          73697A65
+          2C206365
+          6C6C2D61
+  49 013b               
+  50 013b               input_error:
+  51 013b 496C6C65		.asciiz "Illegal input value, cell-auto-sim terminating\n"
+          67616C20
+          696E7075
+          74207661
+          6C75652C
+          2063656C
+  52 016b               
+  53 016b               banner:
+  54 016b 2A2A2A2A		.ascii "*****************************************\n"
+          2A2A2A2A
+          2A2A2A2A
+          2A2A2A2A
+          2A2A2A2A
+          2A2A2A2A
+  55 0195 2A2A2020		.ascii "**     Cellular Automata Simulator     **\n"
+          20202043
+          656C6C75
+          6C617220
+          4175746F
+          6D617461
+  56 01bf 2A2A2A2A		.asciiz "*****************************************\n\n"
+          2A2A2A2A
+          2A2A2A2A
+          2A2A2A2A
+          2A2A2A2A
+          2A2A2A2A
+  57 01eb               
+  58 01eb               rule_out:
+  59 01eb 52756C65		.asciiz "Rule "
+          2000    
+  60 01f1               scale:
+  61 01f1 2020202D		.asciiz "   ----+----0----+----0----+----0----+----0----+----0----+----0----+----0"   
+          2D2D2D2B
+          2D2D2D2D
+          302D2D2D
+          2D2B2D2D
+          2D2D302D
+  62 023b               	
+  63 0000               	.text
+  64 0000               
+  65 0000               # 
+  66 0000               # Name:		print_int
+  67 0000               #
+  68 0000               # Description:	just prints an integer
+  69 0000               #
+  70 0000               # Arguments:	a0 the address of the number to print
+  71 0000               # Returns:	none
+  72 0000               #
+  73 0000               print_int:
+  74 0000 34020001		li 	$v0, PRINT_INT
+  75 0004 8C840000		lw	$a0, 0($a0)
+  76 0008 0000000C		syscall
+  77 000c 03E00008		jr	$ra
+  78 0010               
+  79 0010               # 
+  80 0010               # Name:		print_gen
+  81 0010               #
+  82 0010               # Description:	just prints the generation
+  83 0010               #
+  84 0010               # Arguments:	none
+  85 0010               # Returns:	none
+  86 0010               #
+  87 0010               print_gen:
+  88 0010 23BDFFFC		addi 	$sp, $sp, -4  	# allocate space for the return address
+  89 0014 AFBF0000		sw 	$ra, 0($sp)	# store the ra on the stack
+  90 0018               
+  91 0018 3C080000		la	$t0, curr_gen
+     001c 35080000
+  92 0020 8D090000		lw	$t1, 0($t0)
+  93 0024 292A000A		slti	$t2, $t1, 10
+  94 0028 11400003		beq	$t2, $zero, no_space
+  95 002c               single_space:
+  96 002c 3C040000		la	$a0, space
+     0030 34840000
+  97 0034 0C000019		jal	print_str
+  98 0038               no_space:
+  99 0038 01002021		move	$a0, $t0
+ 100 003c 0C000000		jal	print_int
+ 101 0040 3C040000		la	$a0, space
+     0044 34840000
+ 102 0048 0C000019		jal	print_str
+ 103 004c               
+ 104 004c 8FBF0000		lw 	$ra, 0($sp)
+ 105 0050 23BD0004		addi 	$sp, $sp, 4 
+ 106 0054 03E00008		jr	$ra
+ 107 0058               
+ 108 0058               
+ 109 0058               # 
+ 110 0058               # Name:		print_char
+ 111 0058               #
+ 112 0058               # Description:	just prints a char
+ 113 0058               #
+ 114 0058               # Arguments:	a0 the address of the char to print
+ 115 0058               # Returns:	none
+ 116 0058               #
+ 117 0058               print_char:
+ 118 0058 3402000B		li 	$v0, PRINT_CHAR
+ 119 005c               	#lw	$a0, 0($a0)
+ 120 005c 0000000C		syscall
+ 121 0060 03E00008		jr	$ra
+ 122 0064               
+ 123 0064               # 
+ 124 0064               # Name:		print_str
+ 125 0064               #
+ 126 0064               # Description:	just prints a string
+ 127 0064               #
+ 128 0064               # Arguments:	a0 the address of the string to print
+ 129 0064               # Returns:	none
+ 130 0064               #
+ 131 0064               print_str:
+ 132 0064 34020004		li 	$v0, PRINT_STRING
+ 133 0068 0000000C		syscall		
+ 134 006c 03E00008		jr	$ra
+ 135 0070               # 
+ 136 0070               # Name:		print_bin
+ 137 0070               #
+ 138 0070               # Description:	just prints an 8-bit rule in binary
+ 139 0070               #
+ 140 0070               # Arguments:	a0 the address of the int to print
+ 141 0070               # Returns:	none
+ 142 0070               #
+ 143 0070               print_bin:
+ 144 0070 23BDFFF0		addi 	$sp, $sp, -16  	# allocate space for the return address
+ 145 0074 AFBF000C		sw 	$ra, 12($sp)	# store the ra on the stack
+ 146 0078 AFB20008		sw	$s2, 8($sp)
+ 147 007c AFB10004		sw 	$s1, 4($sp)
+ 148 0080 AFB00000		sw 	$s0, 0($sp)
+ 149 0084               
+ 150 0084 8C900000		lw	$s0, 0($a0)
+ 151 0088 20110007		addi	$s1, $zero, 7
+ 152 008c               bin_loop:
+ 153 008c 02309006		srlv	$s2, $s0, $s1
+ 154 0090 32440001		andi	$a0, $s2, 1
+ 155 0094 34020001		li 	$v0, PRINT_INT
+ 156 0098 0000000C		syscall
+ 157 009c 12200002		beq	$s1, $zero, end_bin
+ 158 00a0 2231FFFF		addi	$s1, -1
+ 159 00a4 08000023		j	bin_loop
+ 160 00a8               end_bin:
+ 161 00a8 8FBF000C		lw 	$ra, 12($sp)
+ 162 00ac 8FB20008		lw	$s2, 8($sp)
+ 163 00b0 8FB10004		lw 	$s1, 4($sp)
+ 164 00b4 8FB00000		lw 	$s0, 0($sp)
+ 165 00b8 23BD0010		addi 	$sp, $sp, 16   	# deallocate space for the return address
+ 166 00bc 03E00008		jr	$ra
+ 167 00c0               	
+ 168 00c0               	
+ 169 00c0               print_start:
+ 170 00c0 23BDFFFC		addi 	$sp, $sp, -4  	# allocate space for the return address
+ 171 00c4 AFBF0000		sw 	$ra, 0($sp)	# store the ra on the stack
+ 172 00c8               
+ 173 00c8 3C040000		la	$a0, banner
+     00cc 34840000
+ 174 00d0 0C000019		jal	print_str
+ 175 00d4 3C040000		la	$a0, rule_out
+     00d8 34840000
+ 176 00dc 0C000019		jal	print_str
+ 177 00e0 3C040000		la	$a0, rule
+     00e4 34840000
+ 178 00e8 0C000000		jal	print_int
+ 179 00ec 3C040000		la	$a0, space
+     00f0 34840000
+ 180 00f4 0C000019		jal	print_str
+ 181 00f8 3C040000		la	$a0, o_paren
+     00fc 34840000
+ 182 0100 0C000019		jal	print_str
+ 183 0104 3C040000		la	$a0, rule
+     0108 34840000
+ 184 010c 0C00001C		jal	print_bin
+ 185 0110 3C040000		la	$a0, c_paren
+     0114 34840000
+ 186 0118 0C000019		jal	print_str
+ 187 011c 3C040000		la	$a0, new_line
+     0120 34840000
+ 188 0124 0C000019		jal	print_str
+ 189 0128 34040002		li	$a0, 2
+ 190 012c 0C00004F		jal	print_row
+ 191 0130               
+ 192 0130 8FBF0000		lw 	$ra, 0($sp)
+ 193 0134 23BD0004		addi 	$sp, $sp, 4   	# deallocate space for the return address
+ 194 0138 03E00008		jr 	$ra		# return from main and exit
+ 195 013c               # 
+ 196 013c               # Name:		print_row
+ 197 013c               #
+ 198 013c               # Description:	just prints an row or scale
+ 199 013c               #
+ 200 013c               # Arguments:	a0     0=rowB, 1=rowA, 2=scale
+ 201 013c               # Returns:	none
+ 202 013c               #
+ 203 013c               print_row:
+ 204 013c 23BDFFF0		addi 	$sp, $sp, -16  	# allocate space for the return address
+ 205 0140 AFBF000C		sw 	$ra, 12($sp)	# store the ra on the stack
+ 206 0144 AFB20008		sw	$s2, 8($sp)
+ 207 0148 AFB10004		sw 	$s1, 4($sp)
+ 208 014c AFB00000		sw 	$s0, 0($sp)
+ 209 0150               
+ 210 0150 00808021		move	$s0, $a0
+ 211 0154 12000009		beq	$s0, $zero, print_B
+ 212 0158 2210FFFE		addi	$s0, $s0, -2
+ 213 015c 12000004		beq	$s0, $zero, print_scale
+ 214 0160               print_A:
+ 215 0160 0C000004		jal	print_gen
+ 216 0164 3C040000		la	$a0, row_A
+     0168 34840000
+ 217 016c 08000062		j	prow_cont
+ 218 0170               print_scale:
+ 219 0170 3C040000		la	$a0, scale
+     0174 34840000
+ 220 0178 08000062		j	prow_cont
+ 221 017c               print_B:
+ 222 017c 0C000004		jal	print_gen
+ 223 0180 3C040000		la	$a0, row_B
+     0184 34840000
+ 224 0188               prow_cont:
+ 225 0188 0C000019		jal	print_str
+ 226 018c               prow_done:
+ 227 018c 3C040000		la	$a0, new_line
+     0190 34840000
+ 228 0194 0C000019		jal	print_str
+ 229 0198               
+ 230 0198 8FBF000C		lw 	$ra, 12($sp)
+ 231 019c 8FB20008		lw	$s2, 8($sp)
+ 232 01a0 8FB10004		lw 	$s1, 4($sp)
+ 233 01a4 8FB00000		lw 	$s0, 0($sp)
+ 234 01a8 23BD0010		addi 	$sp, $sp, 16   	# deallocate space for the return address
+ 235 01ac 03E00008		jr	$ra
+ 236 01b0               
+ 237 01b0               # 
+ 238 01b0               # Name:		rule_#(0-7)
+ 239 01b0               #
+ 240 01b0               # Description:	applies the given rule bit
+ 241 01b0               #
+ 242 01b0               # Arguments:	a0     left cell, a1	current cell, a2	right cell
+ 243 01b0               # Returns:	v0	updated current cell
+ 244 01b0               #
+ 245 01b0               rule_0:
+ 246 01b0 3C080000		la	$t0, rule
+     01b4 35080000
+ 247 01b8 8D080000		lw	$t0, 0($t0)
+ 248 01bc 08000092		j	live_or_not
+ 249 01c0               rule_1:
+ 250 01c0 3C080000		la	$t0, rule
+     01c4 35080000
+ 251 01c8 8D080000		lw	$t0, 0($t0)
+ 252 01cc 00084042		srl	$t0, $t0, 1
+ 253 01d0 08000092		j	live_or_not
+ 254 01d4               rule_2:
+ 255 01d4 3C080000		la	$t0, rule
+     01d8 35080000
+ 256 01dc 8D080000		lw	$t0, 0($t0)
+ 257 01e0 00084082		srl	$t0, $t0, 2
+ 258 01e4 08000092		j	live_or_not
+ 259 01e8               rule_3:
+ 260 01e8 3C080000		la	$t0, rule
+     01ec 35080000
+ 261 01f0 8D080000		lw	$t0, 0($t0)
+ 262 01f4 000840C2		srl	$t0, $t0, 3
+ 263 01f8 08000092		j	live_or_not
+ 264 01fc               rule_4:
+ 265 01fc 3C080000		la	$t0, rule
+     0200 35080000
+ 266 0204 8D080000		lw	$t0, 0($t0)
+ 267 0208 00084102		srl	$t0, $t0, 4
+ 268 020c 08000092		j	live_or_not
+ 269 0210               rule_5:
+ 270 0210 3C080000		la	$t0, rule
+     0214 35080000
+ 271 0218 8D080000		lw	$t0, 0($t0)
+ 272 021c 00084142		srl	$t0, $t0, 5
+ 273 0220 08000092		j	live_or_not
+ 274 0224               rule_6:
+ 275 0224 3C080000		la	$t0, rule
+     0228 35080000
+ 276 022c 8D080000		lw	$t0, 0($t0)
+ 277 0230 00084182		srl	$t0, $t0, 6
+ 278 0234 08000092		j	live_or_not
+ 279 0238               rule_7:
+ 280 0238 3C080000		la	$t0, rule
+     023c 35080000
+ 281 0240 8D080000		lw	$t0, 0($t0)
+ 282 0244 000841C2		srl	$t0, $t0, 7
+ 283 0248               live_or_not:
+ 284 0248 31080001		andi	$t0, $t0, 1
+ 285 024c 11000006		beq	$t0, $zero, dead	#should it live or die?
+ 286 0250               live:
+ 287 0250 20A9FFD2		addi	$t1, $a1, -46
+ 288 0254 11200002		beq	$t1, $zero, birth
+ 289 0258 20A20001		addi	$v0, $a1, 1
+ 290 025c 0800009B		j	done_rule
+ 291 0260               birth:
+ 292 0260 34020041		li	$v0, 65
+ 293 0264 0800009B		j	done_rule
+ 294 0268               dead:
+ 295 0268 3402002E		li	$v0, 46
+ 296 026c               done_rule:
+ 297 026c 03E00008		jr	$ra
+ 298 0270               
+ 299 0270               
+ 300 0270               # 
+ 301 0270               # Name:		apply_rules
+ 302 0270               #
+ 303 0270               # Description:	loops over a row and applies the rule
+ 304 0270               #
+ 305 0270               # Arguments:	a0     which row to update		0=B, 1=A
+ 306 0270               # Returns:	none
+ 307 0270               #
+ 308 0270               apply_rules:
+ 309 0270 23BDFFE4		addi 	$sp, $sp, -28  	# allocate space for the return address
+ 310 0274 AFBF0018		sw 	$ra, 24($sp)	# store the ra on the stack
+ 311 0278 AFB50014		sw 	$s5, 20($sp)
+ 312 027c AFB40010		sw 	$s4, 16($sp)
+ 313 0280 AFB3000C		sw 	$s3, 12($sp)
+ 314 0284 AFB20008		sw 	$s2, 8($sp)
+ 315 0288 AFB10004		sw 	$s1, 4($sp)
+ 316 028c AFB00000		sw 	$s0, 0($sp)
+ 317 0290               
+ 318 0290 14800007		bne	$a0, $zero, change_A
+ 319 0294               change_B:
+ 320 0294 3C100000		la	$s0, row_B
+     0298 36100000
+ 321 029c 3C110000		la	$s1, row_A
+     02a0 36310000
+ 322 02a4 3C150000		la	$s5, row_A
+     02a8 36B50000
+ 323 02ac 080000B2		j	change_set
+ 324 02b0               change_A:
+ 325 02b0 3C100000		la	$s0, row_A
+     02b4 36100000
+ 326 02b8 3C110000		la	$s1, row_B
+     02bc 36310000
+ 327 02c0 3C150000		la	$s5, row_B
+     02c4 36B50000
+ 328 02c8               change_set:	#s1 will remain, s0 will be updated
+ 329 02c8 3C120000		la	$s2, size
+     02cc 36520000
+ 330 02d0 8E520000		lw	$s2, 0($s2)
+ 331 02d4 00009821		move	$s3, $zero	#counter
+ 332 02d8               apply_loop:
+ 333 02d8 1272000C		beq	$s3, $s2, apply_last
+ 334 02dc 12600004		beq	$s3, $zero, apply_first
+ 335 02e0 8224FFFF		lb	$a0, -1($s1)	#left
+ 336 02e4 82250000		lb	$a1, 0($s1)	#current
+ 337 02e8 82260001		lb	$a2, 1($s1)	#right
+ 338 02ec 080000C7		j	pickrule
+ 339 02f0               apply_first:
+ 340 02f0 02327820		add	$t7, $s1, $s2
+ 341 02f4 21EFFFFF		addi	$t7, $t7, -1
+ 342 02f8 22730001		addi	$s3, $s3, 1	#incremement as a bugfix?
+ 343 02fc               				#ok, it was looping too far(to the null)
+ 344 02fc 81E40000		lb	$a0, 0($t7)	#left
+ 345 0300 82250000		lb	$a1, 0($s1)	#current
+ 346 0304 82260001		lb	$a2, 1($s1)	#right
+ 347 0308 080000C7		j	pickrule
+ 348 030c               apply_last:
+ 349 030c 8224FFFF		lb	$a0, -1($s1)	#left
+ 350 0310 82250000		lb	$a1, 0($s1)	#current
+ 351 0314 82A60000		lb	$a2, 0($s5)	#right
+ 352 0318 080000C7		j	pickrule
+ 353 031c               
+ 354 031c               pickrule:
+ 355 031c 3414002E		li	$s4, 46		#period ascii
+ 356 0320 1094000B		beq	$a0, $s4, r0xx
+ 357 0324               r1xx:
+ 358 0324 10B40005		beq	$a1, $s4, r10x
+ 359 0328               r11x:
+ 360 0328 10D40002		beq	$a2, $s4, r110
+ 361 032c 0C00008E		jal	rule_7
+ 362 0330 080000DE		j	apply_increment
+ 363 0334               r110:
+ 364 0334 0C000089		jal	rule_6
+ 365 0338 080000DE		j	apply_increment
+ 366 033c               r10x:
+ 367 033c 10D40002		beq	$a2, $s4, r100
+ 368 0340 0C000084		jal	rule_5
+ 369 0344 080000DE		j	apply_increment
+ 370 0348               r100:
+ 371 0348 0C00007F		jal	rule_4
+ 372 034c 080000DE		j	apply_increment
+ 373 0350               r0xx:
+ 374 0350 10B40005		beq	$a1, $s4, r00x
+ 375 0354               r01x:
+ 376 0354 10D40002		beq	$a2, $s4, r010
+ 377 0358 0C00007A		jal	rule_3
+ 378 035c 080000DE		j	apply_increment
+ 379 0360               r010:	
+ 380 0360 0C000075		jal	rule_2
+ 381 0364 080000DE		j	apply_increment
+ 382 0368               r00x:
+ 383 0368 10D40002		beq	$a2, $s4, r000
+ 384 036c 0C000070		jal	rule_1
+ 385 0370 080000DE		j	apply_increment
+ 386 0374               r000:
+ 387 0374 0C00006C		jal	rule_0
+ 388 0378               apply_increment:
+ 389 0378 A2020000		sb	$v0, 0($s0)
+ 390 037c 12720004		beq	$s3, $s2, apply_done
+ 391 0380 22730001		addi	 $s3, $s3, 1
+ 392 0384 22100001		addi	$s0, $s0, 1
+ 393 0388 22310001		addi	$s1, $s1, 1
+ 394 038c 080000B6		j	apply_loop
+ 395 0390               apply_done:
+ 396 0390 8FBF0018		lw 	$ra, 24($sp)
+ 397 0394 8FB50014		lw 	$s5, 20($sp)
+ 398 0398 8FB40010		lw 	$s4, 16($sp)
+ 399 039c 8FB3000C		lw 	$s3, 12($sp)
+ 400 03a0 8FB20008		lw 	$s2, 8($sp)
+ 401 03a4 8FB10004		lw 	$s1, 4($sp)
+ 402 03a8 8FB00000		lw 	$s0, 0($sp)
+ 403 03ac 23BD001C		addi 	$sp, $sp, 28   	# deallocate space for the return address
+ 404 03b0 03E00008		jr 	$ra		# return from main and exit
+ 405 03b4               #
+ 406 03b4               # Name:		MAIN PROGRAM
+ 407 03b4               #
+ 408 03b4               # Description:	Main logic for the program.
+ 409 03b4               #
+ 410 03b4               #	This program 
+ 411 03b4               #
+ 412 03b4               	.globl	main
+ 413 03b4               main:
+ 414 03b4 23BDFFF4		addi 	$sp, $sp, -12  	# allocate space for the return address
+ 415 03b8 AFBF0008		sw 	$ra, 8($sp)	# store the ra on the stack
+ 416 03bc AFB10004		sw 	$s1, 4($sp)
+ 417 03c0 AFB00000		sw 	$s0, 0($sp)
+ 418 03c4               main_read:
+ 419 03c4 34020005		li	$v0, READ_INT	#rule number
+ 420 03c8 0000000C		syscall
+ 421 03cc 00408021		move	$s0, $v0
+ 422 03d0 0040402A		slt	$t0, $v0, $zero
+ 423 03d4 14080056		bne	$zero, $t0, error1
+ 424 03d8 28480100		slti	$t0, $v0, 256
+ 425 03dc 10080054		beq	$zero, $t0, error1
+ 426 03e0 3C080000		la	$t0, rule
+     03e4 35080000
+ 427 03e8 AD100000		sw	$s0, 0($t0)
+ 428 03ec               
+ 429 03ec 34020005		li	$v0, READ_INT	#generations number
+ 430 03f0 0000000C		syscall
+ 431 03f4 00408021		move	$s0, $v0
+ 432 03f8 0040402A		slt	$t0, $v0, $zero
+ 433 03fc 14080050		bne	$zero, $t0, error2
+ 434 0400 2848001A		slti	$t0, $v0, 26
+ 435 0404 1008004E		beq	$zero, $t0, error2
+ 436 0408 3C080000		la	$t0, gens
+     040c 35080000
+ 437 0410 AD100000		sw	$s0, 0($t0)
+ 438 0414               
+ 439 0414 34020005		li	$v0, READ_INT	#size
+ 440 0418 0000000C		syscall
+ 441 041c 00408021		move	$s0, $v0
+ 442 0420 00409021		move	$s2, $v0
+ 443 0424 28480001		slti	$t0, $v0, 1
+ 444 0428 14080049		bne	$zero, $t0, error3
+ 445 042c 28480047		slti	$t0, $v0, 71
+ 446 0430 10080047		beq	$zero, $t0, error3
+ 447 0434 3C090000		la	$t1, size
+     0438 35290000
+ 448 043c AD300000		sw	$s0, 0($t1)
+ 449 0440 3C090000		la	$t1, row_A
+     0444 35290000
+ 450 0448 01304820		add	$t1, $t1, $s0
+ 451 044c A1200000		sb	$zero, 0($t1)
+ 452 0450 3C090000		la	$t1, row_B
+     0454 35290000
+ 453 0458 01304820		add	$t1, $t1, $s0
+ 454 045c A1200000		sb	$zero, 0($t1)
+ 455 0460 22100003		addi	$s0, $s0, 3
+ 456 0464 3C090000		la	$t1, scale
+     0468 35290000
+ 457 046c 01304820		add	$t1, $t1, $s0
+ 458 0470 A1200000		sb	$zero, 0($t1)
+ 459 0474               
+ 460 0474               			#read actual values(s2 has size)
+ 461 0474 00008021		move	$s0, $zero	#counter
+ 462 0478 3C110000		la	$s1, row_A
+     047c 36310000
+ 463 0480               input_loop:
+ 464 0480 34020005		li	$v0, READ_INT
+ 465 0484 0000000C		syscall
+ 466 0488 28480000		slti	$t0, $v0, 0
+ 467 048c 14080034		bne	$zero, $t0, error4
+ 468 0490 28480002		slti	$t0, $v0, 2
+ 469 0494 10080032		beq	$zero, $t0, error4
+ 470 0498 10400003		beq	$v0, $zero, init_dead
+ 471 049c               init_life:
+ 472 049c 34080041		li	$t0, 65	#A
+ 473 04a0 A2280000		sb	$t0, 0($s1)
+ 474 04a4 0800012C		j	in_done
+ 475 04a8               init_dead:
+ 476 04a8 3408002E		li	$t0, 46	#period
+ 477 04ac A2280000		sb	$t0, 0($s1)
+ 478 04b0               in_done:
+ 479 04b0 22100001		addi	$s0, $s0, 1
+ 480 04b4 22310001		addi	$s1, $s1, 1
+ 481 04b8 1612FFF1		bne	$s0, $s2, input_loop
+ 482 04bc               begin_main:
+ 483 04bc 0C000030		jal	print_start
+ 484 04c0 34040001		li	$a0, 1
+ 485 04c4 0C00004F		jal	print_row
+ 486 04c8 34100001		li	$s0, 1	#row A
+ 487 04cc               loop_gens:
+ 488 04cc 12000002		beq	$s0, $zero, now_A
+ 489 04d0 34100000		li	$s0, 0
+ 490 04d4 08000137		j	update_gen
+ 491 04d8               now_A:
+ 492 04d8 34100001		li	$s0, 1
+ 493 04dc               update_gen:
+ 494 04dc 3C080000		la	$t0, curr_gen
+     04e0 35080000
+ 495 04e4 8D090000		lw	$t1, 0($t0)
+ 496 04e8 3C0A0000		la	$t2, gens
+     04ec 354A0000
+ 497 04f0 8D4B0000		lw	$t3, 0($t2)
+ 498 04f4 112B0007		beq	$t1, $t3, last_scale
+ 499 04f8 21290001		addi	$t1, $t1, 1
+ 500 04fc AD090000		sw	$t1, 0($t0)
+ 501 0500 02002021		move	$a0, $s0
+ 502 0504 0C00009C		jal	apply_rules
+ 503 0508 02002021		move	$a0, $s0
+ 504 050c 0C00004F		jal	print_row
+ 505 0510 08000133		j	loop_gens
+ 506 0514               last_scale:
+ 507 0514 34040002		li	$a0, 2
+ 508 0518 0C00004F		jal	print_row
+ 509 051c               main_done:
+ 510 051c 8FBF0008		lw 	$ra, 8($sp)
+ 511 0520 8FB10004		lw 	$s1, 4($sp)
+ 512 0524 8FB00000		lw 	$s0, 0($sp)
+ 513 0528 23BD000C		addi 	$sp, $sp, 12   	# deallocate space for the return address
+ 514 052c 03E00008		jr 	$ra		# return from main and exit
+ 515 0530               error1:
+ 516 0530 3C040000		la	$a0, rule_error
+     0534 34840000
+ 517 0538 0C000019		jal	print_str
+ 518 053c 08000147		j	main_done
+ 519 0540               error2:
+ 520 0540 3C040000		la	$a0, gen_error
+     0544 34840000
+ 521 0548 0C000019		jal	print_str
+ 522 054c 08000147		j	main_done
+ 523 0550               error3:
+ 524 0550 3C040000		la	$a0, size_error
+     0554 34840000
+ 525 0558 0C000019		jal	print_str
+ 526 055c 08000147		j	main_done
+ 527 0560               error4:
+ 528 0560 3C040000		la	$a0, input_error
+     0564 34840000
+ 529 0568 0C000019		jal	print_str
+ 530 056c 08000147		j	main_done
+
+
+EXIT             = 0000000A   
+PRINT_CHAR       = 0000000B   
+PRINT_INT        = 00000001   
+PRINT_STRING     = 00000004   
+READ_INT         = 00000005   
+apply_done         00000390 R  text 
+apply_first        000002F0 R  text 
+apply_increment    00000378 R  text 
+apply_last         0000030C R  text 
+apply_loop         000002D8 R  text 
+apply_rules        00000270 R  text 
+banner             0000016B R  data 
+begin_main         000004BC R  text 
+bin_loop           0000008C R  text 
+birth              00000260 R  text 
+c_paren            000000A6 R  data 
+change_A           000002B0 R  text 
+change_B           00000294 R  text 
+change_set         000002C8 R  text 
+curr_gen           00000098 R  data 
+dead               00000268 R  text 
+done_rule          0000026C R  text 
+end_bin            000000A8 R  text 
+error1             00000530 R  text 
+error2             00000540 R  text 
+error3             00000550 R  text 
+error4             00000560 R  text 
+gen_error          000000D8 R  data 
+gens               00000094 R  data 
+in_done            000004B0 R  text 
+init_dead          000004A8 R  text 
+init_life          0000049C R  text 
+input_error        0000013B R  data 
+input_loop         00000480 R  text 
+last_scale         00000514 R  text 
+live               00000250 R  text 
+live_or_not        00000248 R  text 
+loop_gens          000004CC R  text 
+main               000003B4 RG text 
+main_done          0000051C R  text 
+main_read          000003C4 R  text 
+new_line           000000A0 R  data 
+no_space           00000038 R  text 
+now_A              000004D8 R  text 
+o_paren            000000A4 R  data 
+pickrule           0000031C R  text 
+print_A            00000160 R  text 
+print_B            0000017C R  text 
+print_bin          00000070 R  text 
+print_char         00000058 R  text 
+print_gen          00000010 R  text 
+print_int          00000000 R  text 
+print_row          0000013C R  text 
+print_scale        00000170 R  text 
+print_start        000000C0 R  text 
+print_str          00000064 R  text 
+prow_cont          00000188 R  text 
+prow_done          0000018C R  text 
+r000               00000374 R  text 
+r00x               00000368 R  text 
+r010               00000360 R  text 
+r01x               00000354 R  text 
+r0xx               00000350 R  text 
+r100               00000348 R  text 
+r10x               0000033C R  text 
+r110               00000334 R  text 
+r11x               00000328 R  text 
+r1xx               00000324 R  text 
+row_A              00000000 R  data 
+row_B              00000047 R  data 
+rule               00000090 R  data 
+rule_0             000001B0 R  text 
+rule_1             000001C0 R  text 
+rule_2             000001D4 R  text 
+rule_3             000001E8 R  text 
+rule_4             000001FC R  text 
+rule_5             00000210 R  text 
+rule_6             00000224 R  text 
+rule_7             00000238 R  text 
+rule_error         000000A8 R  data 
+rule_out           000001EB R  data 
+scale              000001F1 R  data 
+single_space       0000002C R  text 
+size               0000009C R  data 
+size_error         0000010E R  data 
+space              000000A2 R  data 
+update_gen         000004DC R  text 

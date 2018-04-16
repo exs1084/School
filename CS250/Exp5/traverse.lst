@@ -1,0 +1,87 @@
+   1 0000               # File:		traverse_tree.asm
+   2 0000               # Author:	K. Reek
+   3 0000               # Contributors:	P. White,
+   4 0000               #		W. Carithers,
+   5 0000               #		<<<Erikson Sodergren>>>
+   6 0000               #
+   7 0000               # Description:	Binary tree traversal functions.
+   8 0000               #
+   9 0000               # Revisions:	$Log$
+  10 0000               
+  11 0000               
+  12 0000               # CONSTANTS
+  13 0000               #
+  14 0000               
+  15 0000               # traversal codes
+  16 0000               PRE_ORDER  = 0
+  17 0000               IN_ORDER   = 1
+  18 0000               POST_ORDER = 2
+  19 0000               
+  20 0000               	.text			# this is program code
+  21 0000               	.align 2		# instructions must be on word boundaries
+  22 0000               
+  23 0000               #***** BEGIN STUDENT CODE BLOCK 3 *****************************
+  24 0000               #
+  25 0000               # Put your traverse_tree subroutine here.
+  26 0000               # 
+  27 0000               	.globl	traverse_tree
+  28 0000               traverse_tree:
+  29 0000 23BDFFF0		addi 	$sp, $sp, -16
+  30 0004 AFBF000C		sw 	$ra, 12($sp)
+  31 0008 AFB20008		sw 	$s2, 8($sp)
+  32 000c AFB10004		sw 	$s1, 4($sp)
+  33 0010 AFB00000		sw 	$s0, 0($sp)
+  34 0014               
+  35 0014 00808021		move	$s0, $a0
+  36 0018 00A08821		move	$s1, $a1
+  37 001c 00C09021		move	$s2, $a2
+  38 0020 12000019		beq	$s0, $zero, traverse_done
+  39 0024 34080000		li	$t0, PRE_ORDER
+  40 0028 11120004		beq	$t0, $s2, trav_pre
+  41 002c 34080001		li	$t0, IN_ORDER
+  42 0030 11120008		beq	$t0, $s2, trav_in
+  43 0034 34080002		li	$t0, POST_ORDER
+  44 0038 1112000D		beq	$t0, $s2, trav_post
+  45 003c               trav_pre:	#print, left, right
+  46 003c               	#move	$a0, $s0
+  47 003c 0220F809		jalr	$s1
+  48 0040 8E040004		lw	$a0, 4($s0)
+  49 0044 0C000000		jal	traverse_tree
+  50 0048 8E040008		lw	$a0, 8($s0)
+  51 004c 0C000000		jal	traverse_tree
+  52 0050 08000022		j	traverse_done
+  53 0054               trav_in:	#left, print, right
+  54 0054 8E040004		lw	$a0, 4($s0)
+  55 0058 0C000000		jal	traverse_tree
+  56 005c 02002021		move	$a0, $s0
+  57 0060 0220F809		jalr	$s1
+  58 0064 8E040008		lw	$a0, 8($s0)
+  59 0068 0C000000		jal	traverse_tree
+  60 006c 08000022		j	traverse_done
+  61 0070               trav_post:	#left, right, print
+  62 0070 8E040004		lw	$a0, 4($s0)
+  63 0074 0C000000		jal	traverse_tree
+  64 0078 8E040008		lw	$a0, 8($s0)
+  65 007c 0C000000		jal	traverse_tree
+  66 0080 02002021		move	$a0, $s0
+  67 0084 0220F809		jalr	$s1
+  68 0088               traverse_done:
+  69 0088 8FBF000C		lw 	$ra, 12($sp)
+  70 008c 8FB20008		lw 	$s2, 8($sp)
+  71 0090 8FB10004		lw 	$s1, 4($sp)
+  72 0094 8FB00000		lw 	$s0, 0($sp)
+  73 0098 23BD0010		addi 	$sp, $sp, 16
+  74 009c               
+  75 009c 03E00008		jr	$ra
+  76 00a0               
+  77 00a0               #***** END STUDENT CODE BLOCK 3 *****************************
+
+
+IN_ORDER       = 00000001   
+POST_ORDER     = 00000002   
+PRE_ORDER      = 00000000   
+trav_in          00000054 R  text 
+trav_post        00000070 R  text 
+trav_pre         0000003C R  text 
+traverse_done    00000088 R  text 
+traverse_tree    00000000 RG text 
