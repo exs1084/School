@@ -1,0 +1,18 @@
+(require racklog)
+male(tony).
+male(ethan).
+male(chris).
+male(ben).
+male(nathan).
+
+female(sim).
+female(helen).
+female(sophie).
+female(olivia).
+
+parents(helen, sim, tony).
+parents(chris, sim, tony).
+parents(ben, sim, tony).
+parents(sophie, helen, ethan).
+parents(olivia, helen, ethan).
+parents(nathan, helen, ethan).

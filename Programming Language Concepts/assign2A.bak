@@ -1,0 +1,15 @@
+;2A-1
+;member? : List sym -> bool
+(define (member? set sym)
+  (if (equal? set '())
+      #f
+      (equal? (list sym) (member sym set))))
+;union : List List -> List
+(define (union set1 set2)
+  (if (equal? set1 '())
+      (if (equal? set2 '())
+          '()
+          set2)
+      (if (equal? set2 '())
+          set1
+          
